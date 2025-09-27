@@ -70,6 +70,7 @@ flowchart LR
   BookingService --> PostgreSQL
   PaymentService --> PostgreSQL
   AdminService --> PostgreSQL
+```
 
 
 
