@@ -17,8 +17,6 @@ The project is built with **Spring Boot Microservices, Docker, Kubernetes, Kafka
 9. [Installation & Setup](#-installation--setup)  
 10. [Docker & Kubernetes](#-docker--kubernetes)  
 11. [Future Enhancements](#-future-enhancements)  
-12. [Contributing](#-contributing)  
-13. [License](#-license)  
 
 ---
 
@@ -72,22 +70,66 @@ flowchart LR
   AdminService --> PostgreSQL
 ```
 
+- ## 🛠️ Tech Stack
 
+### Backend Technologies
+- **Java 21** - Programming language
+- **Spring Boot 3.x** - Application framework
+- **Spring Security** - Authentication and authorization
+- **Spring Data JPA** - Data access layer
+- **Spring Web** - REST API development
+- **Spring Validation** - Input validation
 
-🛠 Tech Stack
+### Database
+- **PostgreSQL/MySQL** - Primary database
 
-Backend: Java 17+, Spring Boot (Microservices)
+### Documentation & Testing
+- **Swagger/OpenAPI 3** - API documentation
+- **JUnit 5** - Unit testing
+- **MockMvc** - Web layer testing
 
-Frontend: React.js (planned)
+### Build & Development
+- **Maven** - Build automation
+- **Docker** - Containerization
+- **Orchestration:** Kubernetes
+- **Spring Boot DevTools** - Development productivity
 
-Databases: PostgreSQL / MySQL
+## 📋 Prerequisites
+- **Maven 3.8+**
+- **API Gateway:** Spring Cloud Gateway  
+- **Service Discovery:** Eureka  
+- **Messaging:** Kafka (event streaming), RabbitMQ (message broker)  
 
-Messaging: Kafka (event streaming), RabbitMQ (message broker)
+---
 
-API Gateway: Spring Cloud Gateway
+## 🔧 Microservices Breakdown
+- **User Service** – Handles user registration, login, authentication  
+- **Vendor Service** – Vendor onboarding, profile, and management  
+- **Inventory Service** – Item listings, categories, availability  
+- **Booking Service** – Rental booking, scheduling, and cancellations  
+- **Payment Service** – Payment processing (future scope)  
+- **Notification Service** – Email/SMS/push notifications  
+- **Admin Service** – Manage vendors, users, and platform data  
 
-Service Discovery: Eureka
+---
 
-Containerization: Docker
+## 🗂 Database Design (example entities)
+- **User:** `id, name, email, password, role, createdAt`  
+- **Vendor:** `id, vendorName, contactInfo, rating`  
+- **Item:** `id, vendorId, category, name, description, pricePerDay, availability`  
+- **Booking:** `id, userId, itemId, startDate, endDate, status`  
+- **Payment:** `id, bookingId, amount, status, paymentMethod`  
 
-Orchestration: Kubernetes
+---
+
+## 📡 API Endpoints (sample)
+- `POST /api/users/register` → Register user  
+- `POST /api/users/login` → Authenticate user  
+- `POST /api/vendors/register` → Vendor registration  
+- `POST /api/items` → Add rental item  
+- `GET /api/items/{id}` → Get item details  
+- `POST /api/bookings` → Create booking  
+- `GET /api/bookings/user/{id}` → Get user bookings  
+- `POST /api/payments` → Process payment  
+
+---
