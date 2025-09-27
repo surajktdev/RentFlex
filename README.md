@@ -81,7 +81,7 @@ flowchart LR
 - **Spring Validation** - Input validation
 
 ### Database
-- **PostgreSQL/MySQL** - Primary database
+- **MySQL** - Primary database
 
 ### Documentation & Testing
 - **Swagger/OpenAPI 3** - API documentation
