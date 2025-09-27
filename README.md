@@ -17,6 +17,8 @@ The project is built with **Spring Boot Microservices, Docker, Kubernetes, Kafka
 9. [Installation & Setup](#-installation--setup)  
 10. [Docker & Kubernetes](#-docker--kubernetes)  
 11. [Future Enhancements](#-future-enhancements)  
+12. [Contributing](#-contributing)  
+13. [License](#-license)  
 
 ---
 
@@ -35,14 +37,14 @@ People often want to **rent items (tools, vehicles, furniture, gadgets, etc.)** 
 ---
 
 ## ✨ Key Features
-- 🔹 Multi-vendor support with vendor registration & inventory management  
-- 🔹 Category-based item listing with availability calendar  
-- 🔹 Rental booking & scheduling system  
-- 🔹 Secure authentication & authorization (OAuth2 / JWT)  
-- 🔹 Order management & invoice generation  
-- 🔹 Notifications (email/SMS/push – future scope)  
-- 🔹 Payment gateway integration (future scope)  
-- 🔹 Admin dashboard for monitoring vendors and users  
+- Multi-vendor support with vendor registration & inventory management  
+- Category-based item listing with availability calendar  
+- Rental booking & scheduling system  
+- Secure authentication & authorization (OAuth2 / JWT)  
+- Order management & invoice generation  
+- Notifications (email/SMS/push – future scope)  
+- Payment gateway integration (future scope)  
+- Admin dashboard for monitoring vendors and users  
 
 ---
 
@@ -69,61 +71,22 @@ flowchart LR
   PaymentService --> PostgreSQL
   AdminService --> PostgreSQL
 
-``` **
 
 
+🛠 Tech Stack
 
+Backend: Java 17+, Spring Boot (Microservices)
 
+Frontend: React.js (planned)
 
----
+Databases: PostgreSQL / MySQL
 
-## 🛠 Tech Stack
-- **Backend:** Java 17+, Spring Boot (Microservices)  
-- **Frontend:** React.js (planned)  
-- **Databases:** PostgreSQL / MySQL  
-- **Messaging:** Kafka (event streaming), RabbitMQ (message broker)  
-- **API Gateway:** Spring Cloud Gateway  
-- **Service Discovery:** Eureka  
-- **Containerization:** Docker  
-- **Orchestration:** Kubernetes  
+Messaging: Kafka (event streaming), RabbitMQ (message broker)
 
----
+API Gateway: Spring Cloud Gateway
 
-## 🔧 Microservices Breakdown
-- **User Service** – Handles user registration, login, authentication  
-- **Vendor Service** – Vendor onboarding, profile, and management  
-- **Inventory Service** – Item listings, categories, availability  
-- **Booking Service** – Rental booking, scheduling, and cancellations  
-- **Payment Service** – Payment processing (future scope)  
-- **Notification Service** – Email/SMS/push notifications  
-- **Admin Service** – Manage vendors, users, and platform data  
+Service Discovery: Eureka
 
----
+Containerization: Docker
 
-## 🗂 Database Design (example entities)
-- **User:** `id, name, email, password, role, createdAt`  
-- **Vendor:** `id, vendorName, contactInfo, rating`  
-- **Item:** `id, vendorId, category, name, description, pricePerDay, availability`  
-- **Booking:** `id, userId, itemId, startDate, endDate, status`  
-- **Payment:** `id, bookingId, amount, status, paymentMethod`  
-
----
-
-## 📡 API Endpoints (sample)
-- `POST /api/users/register` → Register user  
-- `POST /api/users/login` → Authenticate user  
-- `POST /api/vendors/register` → Vendor registration  
-- `POST /api/items` → Add rental item  
-- `GET /api/items/{id}` → Get item details  
-- `POST /api/bookings` → Create booking  
-- `GET /api/bookings/user/{id}` → Get user bookings  
-- `POST /api/payments` → Process payment  
-
----
-
-## ⚙️ Installation & Setup
-
-### 🔹 Clone Repository
-```bash
-git clone https://github.com/your-username/rentflex.git
-cd rentflex
+Orchestration: Kubernetes
