@@ -48,11 +48,6 @@ People often want to **rent items (tools, vehicles, furniture, gadgets, etc.)** 
 
 ## 🏗 System Architecture
 
-- **API Gateway:** Handles routing, authentication, and service discovery  
-- **Service-to-Service Communication:** REST (Feign Clients) & Messaging (Kafka / RabbitMQ)  
-- **Databases:** PostgreSQL / MySQL (per service schema)  
-- **Deployment:** Docker containers orchestrated with Kubernetes  
-
 ```mermaid
 flowchart LR
   User -->|Requests| APIGateway
@@ -74,119 +69,55 @@ flowchart LR
   PaymentService --> PostgreSQL
   AdminService --> PostgreSQL
 
+---
 
+## 🛠 Tech Stack
+- **Backend:** Java 17+, Spring Boot (Microservices)  
+- **Frontend:** React.js (planned)  
+- **Databases:** PostgreSQL / MySQL  
+- **Messaging:** Kafka (event streaming), RabbitMQ (message broker)  
+- **API Gateway:** Spring Cloud Gateway  
+- **Service Discovery:** Eureka  
+- **Containerization:** Docker  
+- **Orchestration:** Kubernetes  
 
+---
 
+## 🔧 Microservices Breakdown
+- **User Service** – Handles user registration, login, authentication  
+- **Vendor Service** – Vendor onboarding, profile, and management  
+- **Inventory Service** – Item listings, categories, availability  
+- **Booking Service** – Rental booking, scheduling, and cancellations  
+- **Payment Service** – Payment processing (future scope)  
+- **Notification Service** – Email/SMS/push notifications  
+- **Admin Service** – Manage vendors, users, and platform data  
 
-Tech Stack
+---
 
-Backend: Java 17+, Spring Boot (Microservices)
+## 🗂 Database Design (example entities)
+- **User:** `id, name, email, password, role, createdAt`  
+- **Vendor:** `id, vendorName, contactInfo, rating`  
+- **Item:** `id, vendorId, category, name, description, pricePerDay, availability`  
+- **Booking:** `id, userId, itemId, startDate, endDate, status`  
+- **Payment:** `id, bookingId, amount, status, paymentMethod`  
 
-Frontend: React.js (planned)
+---
 
-Databases: PostgreSQL / MySQL
+## 📡 API Endpoints (sample)
+- `POST /api/users/register` → Register user  
+- `POST /api/users/login` → Authenticate user  
+- `POST /api/vendors/register` → Vendor registration  
+- `POST /api/items` → Add rental item  
+- `GET /api/items/{id}` → Get item details  
+- `POST /api/bookings` → Create booking  
+- `GET /api/bookings/user/{id}` → Get user bookings  
+- `POST /api/payments` → Process payment  
 
-Messaging: Kafka (event streaming), RabbitMQ (message broker)
+---
 
-API Gateway: Spring Cloud Gateway
+## ⚙️ Installation & Setup
 
-Service Discovery: Eureka
-
-Containerization: Docker
-
-Orchestration: Kubernetes
-
-🔧 Microservices Breakdown
-
-User Service – Handles user registration, login, authentication
-
-Vendor Service – Vendor onboarding, profile, and management
-
-Inventory Service – Item listings, categories, availability
-
-Booking Service – Rental booking, scheduling, and cancellations
-
-Payment Service – Payment processing (future scope)
-
-Notification Service – Email/SMS/push notifications
-
-Admin Service – Manage vendors, users, and platform data
-
-🗂 Database Design (example entities)
-
-User: id, name, email, password, role, createdAt
-
-Vendor: id, vendorName, contactInfo, rating
-
-Item: id, vendorId, category, name, description, pricePerDay, availability
-
-Booking: id, userId, itemId, startDate, endDate, status
-
-Payment: id, bookingId, amount, status, paymentMethod
-
-📡 API Endpoints (sample)
-
-POST /api/users/register → Register user
-
-POST /api/users/login → Authenticate user
-
-POST /api/vendors/register → Vendor registration
-
-POST /api/items → Add rental item
-
-GET /api/items/{id} → Get item details
-
-POST /api/bookings → Create booking
-
-GET /api/bookings/user/{id} → Get user bookings
-
-POST /api/payments → Process payment
-
-⚙️ Installation & Setup
-🔹 Clone Repository
+### 🔹 Clone Repository
+```bash
 git clone https://github.com/your-username/rentflex.git
 cd rentflex
-
-🔹 Build Microservices
-./mvnw clean install
-
-🔹 Run Locally
-
-Go inside each microservice folder and start it:
-
-cd user-service
-./mvnw spring-boot:run
-
-
-Repeat for other services (vendor, inventory, booking, etc.).
-
-🐳 Docker & Kubernetes
-Run with Docker Compose
-docker-compose up --build
-
-Deploy to Kubernetes
-kubectl apply -f k8s/
-
-🚀 Future Enhancements
-
-Payment gateway (Stripe / Razorpay)
-
-Vendor subscription plans
-
-Analytics & reporting dashboard
-
-Mobile app version (React Native / Flutter)
-
-AI-based recommendation engine
-
-🤝 Contributing
-
-Contributions are welcome!
-
-Fork the repo
-
-Create a feature branch (git checkout -b feature-name)
-
-Commit your changes
-
-Push and open a Pull Request
