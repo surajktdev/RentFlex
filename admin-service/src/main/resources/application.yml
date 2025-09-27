@@ -1,0 +1,12 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: Admin Service
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/admin_db
+    username: root
+    password: admin
+
