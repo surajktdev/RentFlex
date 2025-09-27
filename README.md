@@ -17,8 +17,6 @@ The project is built with **Spring Boot Microservices, Docker, Kubernetes, Kafka
 9. [Installation & Setup](#-installation--setup)  
 10. [Docker & Kubernetes](#-docker--kubernetes)  
 11. [Future Enhancements](#-future-enhancements)  
-12. [Contributing](#-contributing)  
-13. [License](#-license)  
 
 ---
 
