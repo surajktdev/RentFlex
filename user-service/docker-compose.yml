@@ -1,0 +1,31 @@
+version: "3.8"
+
+services:
+  mysql:
+    image: mysql:8
+    container_name: mysql_db_user_service
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: user_db
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  user-service:
+    build: .
+    container_name: user_service_container
+    restart: always
+    depends_on:
+      - mysql
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/user_db
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: admin
+      SERVER_PORT: 8086
+    ports:
+      - "8086:8086"
+
+volumes:
+  mysql_data:

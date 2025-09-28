@@ -2,7 +2,8 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
-      <profile name="Annotation profile for Vendor Service" enabled="true">
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Annotation profile for User Service" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
@@ -13,9 +14,18 @@
         <module name="payment-service" />
         <module name="inventory-service" />
         <module name="booking-service" />
-        <module name="user-service" />
         <module name="notification-service" />
         <module name="admin-service" />
+      </profile>
+      <profile name="Annotation profile for user-service" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.40/lombok-1.18.40.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.40/lombok-1.18.40.jar" />
+        </processorPath>
+        <module name="user-service" />
       </profile>
     </annotationProcessing>
   </component>
