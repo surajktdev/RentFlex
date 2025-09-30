@@ -14,7 +14,7 @@ services:
       - mysql_data:/var/lib/mysql
 
   user-service:
-    build: .
+    image: developwithsuraj/user-service:1.0
     container_name: user_service_container
     restart: always
     depends_on:

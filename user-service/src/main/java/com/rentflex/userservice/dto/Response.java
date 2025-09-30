@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 @Builder
 public class Response {
-    private Long Id;
+    private Long id;
 
     private String userName;
 
