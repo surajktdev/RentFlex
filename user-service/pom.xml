@@ -119,13 +119,9 @@
                     <java>
                         <!-- Use Google Java Format -->
                         <googleJavaFormat>
-                            <version>1.17.0</version> <!-- Use the latest version -->
-                            <style>AOSP</style> <!-- Or GOOGLE -->
+                            <version>1.17.0</version>
+                            <style>AOSP</style>
                         </googleJavaFormat>
-                        <!-- Or use Eclipse JDT formatter -->
-                        <!-- <eclipse>
-                            <file>${project.basedir}/eclipse-java-google-style.xml</file>
-                        </eclipse> -->
                         <removeUnusedImports/>
                         <trimTrailingWhitespace/>
                         <endWithNewline/>

@@ -1,13 +1,20 @@
 server:
-  port: 8087
+  port: ${SERVER_PORT:8087}
 
 spring:
+  security:
+    user:
+      name: admin
+      password: admin
   application:
     name: Vendor Service
 
-
-
   datasource:
-    url: jdbc:mysql://localhost:3306/vendor_db
-    username: root
-    password: admin
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/vendor_db}
+    username: ${SPRING_DATASOURCE_USERNAME:root}
+    password: ${SPRING_DATASOURCE_PASSWORD:admin}
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.MySQL8Dialect
