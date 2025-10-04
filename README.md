@@ -70,7 +70,7 @@ flowchart LR
   AdminService --> PostgreSQL
 ```
 
-- ## 🛠️ Tech Stack
+## 🛠️ Tech Stack
 
 ### Backend Technologies
 - **Java 21** - Programming language
@@ -114,7 +114,7 @@ flowchart LR
 ---
 
 ## 🗂 Database Design (example entities)
-- **User:** `id, name, email, password, role, createdAt`  
+- **User:** `id, name, email, password, role, status, createdAt`  
 - **Vendor:** `id, vendorName, contactInfo, rating`  
 - **Item:** `id, vendorId, category, name, description, pricePerDay, availability`  
 - **Booking:** `id, userId, itemId, startDate, endDate, status`  
