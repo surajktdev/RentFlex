@@ -4,11 +4,11 @@
 
 ### *Empowering Seamless Rentals, Accelerating Growth Everywhere*
 
-![Last Commit](https://img.shields.io/github/last-commit/surajktdev/RentFlex---Public?style=for-the-badge&color=blue)
+![Last Commit](https://img.shields.io/github/last-commit/surajktdev/RentFlex?style=for-the-badge&color=blue)
 ![Java](https://img.shields.io/badge/java-99.7%25-orange?style=for-the-badge&logo=java)
-![Languages](https://img.shields.io/github/languages/count/surajktdev/RentFlex---Public?style=for-the-badge&color=blue)
-![Stars](https://img.shields.io/github/stars/surajktdev/RentFlex---Public?style=for-the-badge&color=yellow)
-![Forks](https://img.shields.io/github/forks/surajktdev/RentFlex---Public?style=for-the-badge&color=blue)
+![Languages](https://img.shields.io/github/languages/count/surajktdev/RentFlex?style=for-the-badge&color=blue)
+![Stars](https://img.shields.io/github/stars/surajktdev/RentFlex?style=for-the-badge&color=yellow)
+![Forks](https://img.shields.io/github/forks/surajktdev/RentFlex?style=for-the-badge&color=blue)
 
 ### Built with the tools and technologies:
 
@@ -27,7 +27,7 @@
 
 ## 🌟 Overview
 
-**RentFlex---Public** is a scalable, microservices-based rental marketplace platform that enables vendors to list items and users to browse, book, and manage rentals efficiently. Built with Spring Boot, Docker, Kubernetes, Kafka, and RabbitMQ, it offers a robust environment for enterprise-grade operations.
+**RentFlex** is a scalable, microservices-based rental marketplace platform that enables vendors to list items and users to browse, book, and manage rentals efficiently. Built with Spring Boot, Docker, Kubernetes, Kafka, and RabbitMQ, it offers a robust environment for enterprise-grade operations.
 
 ---
 
@@ -431,8 +431,8 @@ Before running this project, ensure you have the following installed:
 
 ```bash
 # 1. Clone the Repository
-git clone https://github.com/surajktdev/RentFlex---Public.git
-cd RentFlex---Public
+git clone https://github.com/surajktdev/RentFlex.git
+cd RentFlex
 
 # 2. Start Infrastructure Services
 docker-compose up -d mysql kafka rabbitmq
@@ -452,8 +452,8 @@ cd booking-service && mvn spring-boot:run
 
 ```bash
 # 1. Clone the Repository
-git clone https://github.com/surajktdev/RentFlex---Public.git
-cd RentFlex---Public
+git clone https://github.com/surajktdev/RentFlex.git
+cd RentFlex
 
 # 2. Build and Start All Services
 docker-compose up --build -d
@@ -605,9 +605,9 @@ kubectl delete namespace rentflex
 
 <div align="center">
 
-![GitHub issues](https://img.shields.io/github/issues/surajktdev/RentFlex---Public?style=for-the-badge)
-![GitHub pull requests](https://img.shields.io/github/issues-pr/surajktdev/RentFlex---Public?style=for-the-badge)
-![GitHub](https://img.shields.io/github/license/surajktdev/RentFlex---Public?style=for-the-badge)
+![GitHub issues](https://img.shields.io/github/issues/surajktdev/RentFlex?style=for-the-badge)
+![GitHub pull requests](https://img.shields.io/github/issues-pr/surajktdev/RentFlex?style=for-the-badge)
+![GitHub](https://img.shields.io/github/license/surajktdev/RentFlex?style=for-the-badge)
 
 ### **Current Version: 1.0.0-ALPHA**
 
@@ -641,7 +641,7 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/suraj-kumar-tiwari-javadev)
 [![Email](https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:surajdeveloper9@gmail.com)
 
-**Project Link:** [RentFlex](https://github.com/surajktdev/RentFlex---Public)
+**Project Link:** [RentFlex](https://github.com/surajktdev/RentFlex)
 
 </div>
 
