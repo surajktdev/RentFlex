@@ -4,11 +4,11 @@
 
 ### *Empowering Seamless Rentals, Accelerating Growth Everywhere*
 
-![Last Commit](https://img.shields.io/github/last-commit/surajktdev/RentFlex---Public?style=for-the-badge&color=blue)
+![Last Commit](https://img.shields.io/github/last-commit/surajktdev/RentFlex?style=for-the-badge&color=blue)
 ![Java](https://img.shields.io/badge/java-99.7%25-orange?style=for-the-badge&logo=java)
-![Languages](https://img.shields.io/github/languages/count/surajktdev/RentFlex---Public?style=for-the-badge&color=blue)
-![Stars](https://img.shields.io/github/stars/surajktdev/RentFlex---Public?style=for-the-badge&color=yellow)
-![Forks](https://img.shields.io/github/forks/surajktdev/RentFlex---Public?style=for-the-badge&color=blue)
+![Languages](https://img.shields.io/github/languages/count/surajktdev/RentFlex?style=for-the-badge&color=blue)
+![Stars](https://img.shields.io/github/stars/surajktdev/RentFlex?style=for-the-badge&color=yellow)
+![Forks](https://img.shields.io/github/forks/surajktdev/RentFlex?style=for-the-badge&color=blue)
 
 ### Built with the tools and technologies:
 
