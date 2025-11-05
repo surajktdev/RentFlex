@@ -18,7 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ServiceImpl implements VendorService {
+public class VendorServiceImpl implements VendorService {
 
     @Autowired private VendorRepo vendorRepo;
 
@@ -60,10 +60,12 @@ public class ServiceImpl implements VendorService {
     public VendorResponse getVendorById(Long vendorId) {
         Vendor savedVendorDetails =
                 vendorRepo
-                        .findById(vendorId)
-                        .orElseThrow(() -> new RuntimeException("Vendor not found"));
+                        .findByVendorId(vendorId)
+                        .orElseThrow(() -> new ResourceNotFoundException("Vendor not found for id: "+vendorId));
 
         return VendorResponse.builder()
+                .vendorId(savedVendorDetails.getVendorId())
+                .userId(savedVendorDetails.getUserId())
                 .businessName(savedVendorDetails.getBusinessName())
                 .email(savedVendorDetails.getEmail())
                 .phoneNumber(savedVendorDetails.getPhoneNumber())
@@ -77,8 +79,8 @@ public class ServiceImpl implements VendorService {
     public VendorResponse updateVendor(Long vendorId, VendorRequest request) {
         Vendor vendorDetails =
                 vendorRepo
-                        .findById(vendorId)
-                        .orElseThrow(() -> new RuntimeException("Vendor not found"));
+                        .findByVendorId(vendorId)
+                        .orElseThrow(() -> new ResourceNotFoundException("Vendor not found"));
 
         vendorDetails.setBusinessName(request.businessName());
         vendorDetails.setAddress(request.address());
@@ -99,6 +101,8 @@ public class ServiceImpl implements VendorService {
                 .map(
                         savedVendorDetails ->
                                 VendorResponse.builder()
+                                        .vendorId(savedVendorDetails.getVendorId())
+                                        .userId(savedVendorDetails.getUserId())
                                         .businessName(savedVendorDetails.getBusinessName())
                                         .email(savedVendorDetails.getEmail())
                                         .phoneNumber(savedVendorDetails.getPhoneNumber())
@@ -114,7 +118,7 @@ public class ServiceImpl implements VendorService {
         Vendor vendorDetails =
                 vendorRepo
                         .findById(vendorId)
-                        .orElseThrow(() -> new RuntimeException("Vendor not found"));
+                        .orElseThrow(() -> new ResourceNotFoundException("Vendor not found"));
 
         vendorDetails.setStatus(status);
         Vendor savedVendorDetails = vendorRepo.save(vendorDetails);
@@ -129,7 +133,7 @@ public class ServiceImpl implements VendorService {
         Vendor savedVendorDetails =
                 vendorRepo
                         .findById(vendorId)
-                        .orElseThrow(() -> new RuntimeException("Vendor not found"));
+                        .orElseThrow(() -> new ResourceNotFoundException("Vendor not found"));
 
         vendorRepo.deleteById(savedVendorDetails.getVendorId());
     }
@@ -144,7 +148,7 @@ public class ServiceImpl implements VendorService {
         Vendor savedVendorDetails =
                 vendorRepo
                         .findByUserId(userId)
-                        .orElseThrow(() -> new RuntimeException("Vendor Details not found"));
+                        .orElseThrow(() -> new ResourceNotFoundException("Vendor Details not found"));
         return VendorResponse.builder()
                 .businessName(savedVendorDetails.getBusinessName())
                 .email(savedVendorDetails.getEmail())

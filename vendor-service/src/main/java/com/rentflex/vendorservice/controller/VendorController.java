@@ -28,7 +28,7 @@ public class VendorController {
         return new ResponseEntity<>(vendor, HttpStatus.CREATED);
     }
 
-    @GetMapping("/{vendorId}")
+    @GetMapping("/single/{vendorId}")
     @Operation(summary = "Get vendor details by their Id")
     public ResponseEntity<VendorResponse> getVendorById(@PathVariable Long vendorId) {
         VendorResponse vendorDetailsById = vendorService.getVendorById(vendorId);
