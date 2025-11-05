@@ -48,9 +48,7 @@ spring:
             - id: inventory-service
               uri: http://localhost:8083
               predicates:
-                - Path=/api/v1/categories/**
-                - Path=/api/v1/item-availability/**
-                - Path=/api/v1/item/**
+                - Path=/api/v1/item/**, /api/v1/categories/**, /api/v1/item-availability/**
 
             - id: booking-service
               uri: http://localhost:8082
@@ -65,5 +63,4 @@ spring:
             - id: payment-service
               uri: http://localhost:8085
               predicates:
-                - Path=/api/v1/payments/**
-                - Path=/api/v1/refunds/**
+                - Path=/api/v1/payments/**, /api/v1/refunds/**
