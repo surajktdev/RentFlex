@@ -1,14 +1,18 @@
 package com.rentflex.inventoryservice.service.impl;
 
+import com.rentflex.inventoryservice.client.VendorClient;
+import com.rentflex.inventoryservice.client.VendorResponse;
 import com.rentflex.inventoryservice.dto.ItemAvailabilityResponse;
 import com.rentflex.inventoryservice.dto.ItemRequest;
 import com.rentflex.inventoryservice.dto.ItemResponse;
+import com.rentflex.inventoryservice.exception.ResourceNotFoundException;
 import com.rentflex.inventoryservice.model.Category;
 import com.rentflex.inventoryservice.model.Item;
 import com.rentflex.inventoryservice.model.ItemAvailability;
 import com.rentflex.inventoryservice.repository.CategoryRepository;
 import com.rentflex.inventoryservice.repository.ItemRepository;
 import com.rentflex.inventoryservice.service.ItemService;
+import feign.FeignException;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -23,15 +27,25 @@ public class ItemServiceImpl implements ItemService {
 
   @Autowired private CategoryRepository categoryRepository;
 
+  @Autowired private VendorClient vendorClient;
+
   @Override
   public ItemResponse createItem(ItemRequest itemRequest) {
     Category category =
         categoryRepository
             .findById(itemRequest.categoryId())
-            .orElseThrow(() -> new RuntimeException("Category not found"));
+            .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
+
+    VendorResponse vendorResponse = null;
+
+    try {
+      vendorResponse = vendorClient.getVendorById(itemRequest.vendorId());
+    } catch (FeignException.NotFound ex) {
+      throw new ResourceNotFoundException("Vendor not found for tag in inventory.");
+    }
 
     Item item = new Item();
-    item.setVendorId(itemRequest.vendorId());
+    item.setVendorId(vendorResponse.getVendorId());
     item.setName(itemRequest.name());
     item.setDescription(itemRequest.description());
     item.setPricePerDay(itemRequest.pricePerDay());
@@ -162,7 +176,7 @@ public class ItemServiceImpl implements ItemService {
   public ItemResponse getItemsByVendor(Long vendorId) {
     Item byVendorId = itemRepository.findByVendorId(vendorId);
     if (vendorId == null) {
-      throw new RuntimeException("Item details not found. for vendorId: " + vendorId);
+      throw new ResourceNotFoundException("Item details not found. for vendorId: " + vendorId);
     }
     List<ItemAvailabilityResponse> availabilityResponseList =
         byVendorId.getAvailabilityList() != null
