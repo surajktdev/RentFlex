@@ -615,11 +615,11 @@ kubectl delete namespace rentflex
 |-----------|--------|----------|
 | User Service | ✅ Complete | 80% |
 | Vendor Service | 🚧 In Progress | 70% |
-| Inventory Service | 🚧 In Progress | 50% |
-| Booking Service | 🚧 In Progress | 30% |
-| Payment Service | 🚧 In Progress | - |
-| Notification Service | ⏳ Planned | - |
-| Admin Service | ⏳ Planned | - |
+| Inventory Service | 🚧 In Progress | 80% |
+| Booking Service | 🚧 In Progress | 60% |
+| Payment Service | 🚧 In Progress | 50% |
+| Notification Service | 🚧 In Progress | 50% |
+| Admin Service | 🚧 In Progress | 30% |
 
 </div>
 
