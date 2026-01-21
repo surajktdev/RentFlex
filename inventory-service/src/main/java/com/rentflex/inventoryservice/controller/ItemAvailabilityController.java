@@ -27,20 +27,22 @@ public class ItemAvailabilityController {
     return new ResponseEntity<>(itemAvailabilityResponse, HttpStatus.CREATED);
   }
 
-  @GetMapping("/item/{itemId}")
-  public ResponseEntity<List<ItemAvailabilityResponse>> getAvailabilityByItem(
-      @PathVariable Long itemId) {
-    List<ItemAvailabilityResponse> availabilityByItem =
-        itemAvailabilityService.getAvailabilityByItem(itemId);
-    return new ResponseEntity<>(availabilityByItem, HttpStatus.FOUND);
-  }
+    @GetMapping("/item/{itemId}")
+    public ResponseEntity<List<ItemAvailabilityResponse>> getAvailabilityByItem(
+            @PathVariable Long itemId) {
+
+        List<ItemAvailabilityResponse> availabilityByItem =
+                itemAvailabilityService.getAvailabilityByItem(itemId);
+
+        return ResponseEntity.ok(availabilityByItem);
+    }
 
   @PutMapping("/{id}")
   public ResponseEntity<ItemAvailabilityResponse> updateAvailability(
       @PathVariable Long id, @RequestBody ItemAvailabilityRequest request) {
     ItemAvailabilityResponse itemAvailabilityResponse =
         itemAvailabilityService.updateAvailability(id, request);
-    return new ResponseEntity<>(itemAvailabilityResponse, HttpStatus.OK);
+    return ResponseEntity.ok(itemAvailabilityResponse);
   }
 
   @DeleteMapping("/{id}")
