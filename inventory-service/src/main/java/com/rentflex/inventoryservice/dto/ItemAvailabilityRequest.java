@@ -1,6 +1,7 @@
 package com.rentflex.inventoryservice.dto;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public record ItemAvailabilityRequest(
-    Long itemId, LocalDate availableFrom, LocalDate availableTo, Boolean isAvailable) {}
+        Long itemId, LocalDateTime availableFrom, LocalDateTime availableTo, Boolean isAvailable) {}

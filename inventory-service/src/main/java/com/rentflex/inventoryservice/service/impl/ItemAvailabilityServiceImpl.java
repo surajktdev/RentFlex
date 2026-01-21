@@ -2,12 +2,14 @@ package com.rentflex.inventoryservice.service.impl;
 
 import com.rentflex.inventoryservice.dto.ItemAvailabilityRequest;
 import com.rentflex.inventoryservice.dto.ItemAvailabilityResponse;
+import com.rentflex.inventoryservice.exception.ResourceNotFoundException;
 import com.rentflex.inventoryservice.model.Item;
 import com.rentflex.inventoryservice.model.ItemAvailability;
 import com.rentflex.inventoryservice.repository.ItemAvailabilityRepository;
 import com.rentflex.inventoryservice.repository.ItemRepository;
 import com.rentflex.inventoryservice.service.ItemAvailabilityService;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,12 +26,12 @@ public class ItemAvailabilityServiceImpl implements ItemAvailabilityService {
             .findById(availabilityRequest.itemId())
             .orElseThrow(
                 () ->
-                    new RuntimeException(
+                    new ResourceNotFoundException(
                         "Item details not found. for itemId: " + availabilityRequest.itemId()));
     ItemAvailability itemAvailability = new ItemAvailability();
     itemAvailability.setItem(savedItem);
-    itemAvailability.setAvailableFrom(LocalDate.now());
-    itemAvailability.setAvailableTo(LocalDate.now());
+    itemAvailability.setAvailableFrom(LocalDateTime.now());
+    itemAvailability.setAvailableTo(LocalDateTime.now());
     itemAvailability.setIsAvailable(availabilityRequest.isAvailable());
     ItemAvailability save = availabilityRepository.save(itemAvailability);
     return ItemAvailabilityResponse.builder()
@@ -46,7 +48,7 @@ public class ItemAvailabilityServiceImpl implements ItemAvailabilityService {
         itemRepository
             .findById(itemId)
             .orElseThrow(
-                () -> new RuntimeException("Item details not found. for itemId: " + itemId));
+                () -> new ResourceNotFoundException("Item details not found. for itemId: " + itemId));
     List<ItemAvailability> byItemId = availabilityRepository.findByItemId(savedItem.getId());
     return byItemId.stream()
         .map(
@@ -68,7 +70,7 @@ public class ItemAvailabilityServiceImpl implements ItemAvailabilityService {
             .findById(availabilityRequest.itemId())
             .orElseThrow(
                 () ->
-                    new RuntimeException(
+                    new ResourceNotFoundException(
                         "Item details not found. for itemId: " + availabilityRequest.itemId()));
     ItemAvailability itemAvailability =
         availabilityRepository
@@ -78,8 +80,8 @@ public class ItemAvailabilityServiceImpl implements ItemAvailabilityService {
                     new RuntimeException(
                         "Item availability details not found for id: " + availabilityId));
     itemAvailability.setItem(savedItem);
-    itemAvailability.setAvailableFrom(LocalDate.now());
-    itemAvailability.setAvailableTo(LocalDate.now());
+    itemAvailability.setAvailableFrom(availabilityRequest.availableFrom());
+    itemAvailability.setAvailableTo(availabilityRequest.availableTo());
     itemAvailability.setIsAvailable(availabilityRequest.isAvailable());
     ItemAvailability save = availabilityRepository.save(itemAvailability);
 
@@ -98,7 +100,7 @@ public class ItemAvailabilityServiceImpl implements ItemAvailabilityService {
             .findById(availabilityId)
             .orElseThrow(
                 () ->
-                    new RuntimeException(
+                    new ResourceNotFoundException(
                         "Item availability details not found for id: " + availabilityId));
     availabilityRepository.deleteById(itemAvailability.getId());
   }

@@ -2,6 +2,8 @@ package com.rentflex.inventoryservice.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import lombok.*;
 
 @Entity
@@ -21,10 +23,10 @@ public class ItemAvailability {
   private Item item;
 
   @Column(nullable = false)
-  private LocalDate availableFrom;
+  private LocalDateTime availableFrom;
 
   @Column(nullable = false)
-  private LocalDate availableTo;
+  private LocalDateTime availableTo;
 
   @Column(nullable = false)
   private Boolean isAvailable;
