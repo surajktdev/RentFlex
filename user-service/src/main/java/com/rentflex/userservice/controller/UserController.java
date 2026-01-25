@@ -7,6 +7,7 @@ import com.rentflex.userservice.model.Status;
 import com.rentflex.userservice.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ public class UserController {
 
     @PostMapping(value = "/register")
     @Operation(summary = "Register New User")
-    public ResponseEntity<UserResponse> register(@RequestBody UserRequest userRequest) {
+    public ResponseEntity<UserResponse> register(@Valid @RequestBody UserRequest userRequest) {
         UserResponse userResponse = userService.registerUser(userRequest);
         return ResponseEntity.ok(userResponse);
     }
@@ -43,7 +44,7 @@ public class UserController {
     @PutMapping("/{id}")
     @Operation(summary = "Update a user profile by ID")
     public ResponseEntity<UserResponse> updateUserProfile(
-            @PathVariable("id") Long userId, @RequestBody UserRequest userRequest) {
+            @PathVariable("id") Long userId, @Valid @RequestBody UserRequest userRequest) {
         UserResponse userResponse = userService.updateUserProfile(userId, userRequest);
         return ResponseEntity.ok(userResponse);
     }

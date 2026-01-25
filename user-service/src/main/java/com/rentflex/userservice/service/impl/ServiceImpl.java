@@ -36,7 +36,7 @@ public class ServiceImpl implements UserService {
         user.setEmail(userRequest.email());
         user.setPassword(passwordEncoder.encode(userRequest.password()));
         user.setRole(userRequest.role());
-        user.setStatus(Status.ACTIVE);
+        user.setStatus(Status.DEACTIVATED);
         user.setCreatedAt(Timestamp.valueOf(LocalDateTime.now()));
         user.setUpdatedAt(Timestamp.valueOf(LocalDateTime.now()));
         User savedUser = userRepository.save(user);
