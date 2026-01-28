@@ -1,9 +1,12 @@
 package com.rentflex.userservice.controller;
 
 import com.rentflex.userservice.auth.AuthRequest;
+import com.rentflex.userservice.auth.AuthResponse;
 import com.rentflex.userservice.auth.JwtUtil;
 import com.rentflex.userservice.dto.UserRequest;
 import com.rentflex.userservice.dto.UserResponse;
+import com.rentflex.userservice.model.User;
+import com.rentflex.userservice.repository.UserRepository;
 import com.rentflex.userservice.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -16,7 +19,10 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/auth/v1/")
@@ -30,8 +36,11 @@ public class PublicController {
 
     @Autowired private AuthenticationManager authenticationManager;
 
-    @Autowired(required = true)
+    @Autowired
     private UserDetailsService userDetailsService;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired private JwtUtil jwtUtil;
 
@@ -44,16 +53,25 @@ public class PublicController {
 
     @PostMapping("/login")
     @Operation(summary = "generate token")
-    public ResponseEntity<String> login(@RequestBody AuthRequest request) {
+    public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(request.email(), request.password()));
             UserDetails userDetails = userDetailsService.loadUserByUsername(request.email());
             String generatedToken = jwtUtil.generateToken(userDetails.getUsername());
-            return new ResponseEntity<>(generatedToken, HttpStatus.OK);
+            User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow(
+                    () ->
+                            new UsernameNotFoundException(
+                                    "User not found with email: " + userDetails.getUsername()));;
+            UserResponse userResponse =
+                    UserResponse.builder().id(user.getId()).userName(user.getUserName()).email(user.getEmail()).role(user.getRole()).status(user.getStatus()).build();
+            AuthResponse response =
+                    AuthResponse.builder().token(generatedToken).userResponse(userResponse).build();
+            return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
             log.error("Exception occurred while createAuthenticationToken ", e);
-            return new ResponseEntity<>("Incorrect username or password", HttpStatus.BAD_REQUEST);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(AuthResponse.builder().message("Incorrect username or password").build());
         }
     }
 }
