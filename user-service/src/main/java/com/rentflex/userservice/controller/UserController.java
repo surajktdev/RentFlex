@@ -20,13 +20,6 @@ public class UserController {
 
     @Autowired private UserService userService;
 
-    @PostMapping(value = "/register")
-    @Operation(summary = "Register New User")
-    public ResponseEntity<UserResponse> register(@Valid @RequestBody UserRequest userRequest) {
-        UserResponse userResponse = userService.registerUser(userRequest);
-        return ResponseEntity.ok(userResponse);
-    }
-
     @GetMapping("/{id}")
     @Operation(summary = "Get a user profile by ID")
     public ResponseEntity<UserResponse> getUserProfileById(@PathVariable("id") Long userId) {
