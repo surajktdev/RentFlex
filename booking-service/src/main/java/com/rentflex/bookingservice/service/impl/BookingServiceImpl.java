@@ -4,7 +4,8 @@ import com.rentflex.bookingservice.client.*;
 import com.rentflex.bookingservice.dto.BookingRequestDTO;
 import com.rentflex.bookingservice.dto.BookingResponseDTO;
 import com.rentflex.bookingservice.dto.CancelBookingRequestDTO;
-import com.rentflex.bookingservice.exception.ResourceNotFoundException;
+import com.rentflex.bookingservice.kafka.events.BookingCreatedEvent;
+import com.rentflex.bookingservice.kafka.producer.BookingEventProducer;
 import com.rentflex.bookingservice.model.Booking;
 import com.rentflex.bookingservice.model.BookingStatus;
 import com.rentflex.bookingservice.repository.BookingRepository;
@@ -13,8 +14,6 @@ import com.rentflex.bookingservice.service.BookingService;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-
-import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +25,7 @@ public class BookingServiceImpl implements BookingService {
     private final PaymentInfoRepository paymentInfoRepository;
     private final UserClient userClient;
     private final InventoryClient inventoryClient;
+    private final BookingEventProducer producer;
 
     @Override
     public BookingResponseDTO createBooking(BookingRequestDTO request) {
@@ -43,27 +43,27 @@ public class BookingServiceImpl implements BookingService {
 
         // pending work
         // Check user validity via UserService (Feign Client)
-        UserResponse userById = null;
-        try {
-            userById = userClient.getUserById(request.userId());
-        } catch (FeignException.NotFound ex) {
-            throw new ResourceNotFoundException("User not found to complete this booking.");
-        }
+        // TODO(Pending work): I have to fix JWT authentication issue in this service
+        //        UserResponse userById = null;
+        //        try {
+        //            userById = userClient.getUserById(request.userId());
+        //        } catch (FeignException.NotFound ex) {
+        //            throw new ResourceNotFoundException("User not found to complete this
+        // booking.");
+        //        }
 
         // Check item availability via InventoryService
-        List<ItemAvailabilityResponse>
-                availabilityByItem = null;
-        try {
-            availabilityByItem = inventoryClient.getAvailabilityByItem(request.itemId());
-        } catch (FeignException.NotFound ex) {
-            throw new ResourceNotFoundException("Item details not found to complete this booking.");
-        }
-
-
+        List<ItemAvailabilityResponse> availabilityByItem = null;
+        //        try {
+        //            availabilityByItem = inventoryClient.getAvailabilityByItem(request.itemId());
+        //        } catch (FeignException.NotFound ex) {
+        //            throw new ResourceNotFoundException("Item details not found to complete this
+        // booking.");
+        //        }
 
         Booking booking = new Booking();
-        booking.setUserId(userById.getId());
-        booking.setItemId(availabilityByItem.getFirst().getItemId());
+        booking.setUserId(request.userId());
+        booking.setItemId(request.itemId());
         booking.setStartDate(request.startDate());
         booking.setEndDate(request.endDate());
         booking.setStatus(request.status());
@@ -71,13 +71,31 @@ public class BookingServiceImpl implements BookingService {
         booking.setUpdatedAt(LocalDateTime.now());
 
         Booking saved = bookingRepository.save(booking);
-        try{
-            //TODO here i have to fix the logic of item availability dates
-            ItemAvailabilityRequest itemAvailabilityRequest = new ItemAvailabilityRequest(availabilityByItem.getFirst().getItemId(), saved.getEndDate(), saved.getStartDate(), false);
-            inventoryClient.updateAvailability(availabilityByItem.getFirst().getItemId(), itemAvailabilityRequest);
-        } catch (FeignException.NotFound ex) {
-            throw new ResourceNotFoundException("Not able to update item after booking");
-        }
+        //        try{
+        //            //TODO(Pending work): here i have to fix the logic of item availability dates
+        //            ItemAvailabilityRequest itemAvailabilityRequest = new
+        // ItemAvailabilityRequest(availabilityByItem.getFirst().getItemId(), saved.getEndDate(),
+        // saved.getStartDate(), false);
+        //            inventoryClient.updateAvailability(availabilityByItem.getFirst().getItemId(),
+        // itemAvailabilityRequest);
+        //        } catch (FeignException.NotFound ex) {
+        //            throw new ResourceNotFoundException("Not able to update item after booking");
+        //        }
+
+        // TODO(Pending work): as of now total amount is coming null I have to fix that
+        //  check item amount from item service accordingly I have to add it in booking table
+
+        // Publish Kafka event
+        BookingCreatedEvent event =
+                new BookingCreatedEvent(
+                        saved.getId(),
+                        saved.getUserId(),
+                        saved.getItemId(),
+                        saved.getTotalPrice(),
+                        "INR",
+                        LocalDateTime.now());
+
+        producer.sendBookingCreatedEvent(event);
         return BookingResponseDTO.builder()
                 .bookingId(saved.getId())
                 .message("Booking created successfully")
