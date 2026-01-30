@@ -1,5 +1,6 @@
 package com.rentflex.userservice.auth;
 
+import com.rentflex.userservice.exception.BadRequestException;
 import com.rentflex.userservice.model.User;
 import com.rentflex.userservice.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                                                 "User not found with email: " + username));
 
         if (!"ACTIVE".equalsIgnoreCase(String.valueOf(user.getStatus()))) {
-            throw new RuntimeException("Account is deactivated. Please contact support");
+            throw new BadRequestException("Account is deactivated. Please contact support");
         }
 
         return org.springframework.security.core.userdetails.User.builder()

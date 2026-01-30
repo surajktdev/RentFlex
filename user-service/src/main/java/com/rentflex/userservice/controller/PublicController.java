@@ -5,6 +5,7 @@ import com.rentflex.userservice.auth.AuthResponse;
 import com.rentflex.userservice.auth.JwtUtil;
 import com.rentflex.userservice.dto.UserRequest;
 import com.rentflex.userservice.dto.UserResponse;
+import com.rentflex.userservice.exception.BadRequestException;
 import com.rentflex.userservice.model.User;
 import com.rentflex.userservice.repository.UserRepository;
 import com.rentflex.userservice.service.UserService;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -54,9 +56,7 @@ public class PublicController {
     @PostMapping("/login")
     @Operation(summary = "generate token")
     public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
-        try {
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(request.email(), request.password()));
+            this.doAuthenticate(request.email(), request.password());
             UserDetails userDetails = userDetailsService.loadUserByUsername(request.email());
             String generatedToken = jwtUtil.generateToken(userDetails.getUsername());
             User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow(
@@ -68,10 +68,16 @@ public class PublicController {
             AuthResponse response =
                     AuthResponse.builder().token(generatedToken).userResponse(userResponse).build();
             return new ResponseEntity<>(response, HttpStatus.OK);
-        } catch (Exception e) {
-            log.error("Exception occurred while createAuthenticationToken ", e);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(AuthResponse.builder().message("Incorrect username or password").build());
-        }
     }
-}
+
+    private void doAuthenticate(String email, String password) {
+
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(email, password);
+        try {
+            authenticationManager.authenticate(authentication);
+        } catch (BadCredentialsException e) {
+            throw new BadRequestException(" Invalid Username or Password  !!");
+            //            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+//                    .body(AuthResponse.builder().message("Incorrect username or password").build());
+        }
+    }}

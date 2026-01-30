@@ -36,9 +36,9 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(EmailAlreadyExistsException.class)
+    @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<Map<String, Object>> handleEmailAlreadyExistsException(
-            EmailAlreadyExistsException exception) {
+            BadRequestException exception) {
         Map<String, Object> body = new HashMap<>();
         body.put("timestamp", LocalDateTime.now());
         //        body.put("error", "Email Already Registered");
