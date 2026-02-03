@@ -28,11 +28,21 @@ public class ItemAvailabilityController {
   }
 
   @GetMapping("/item/{itemId}")
-  public ResponseEntity<List<ItemAvailabilityResponse>> getAvailabilityByItem(
+  public ResponseEntity<ItemAvailabilityResponse> getAvailabilityByItemId(
       @PathVariable Long itemId) {
 
+    ItemAvailabilityResponse availabilityByItem =
+        itemAvailabilityService.getAvailabilityByItemId(itemId);
+
+    return ResponseEntity.ok(availabilityByItem);
+  }
+
+  @GetMapping("/items/{itemIds}")
+  public ResponseEntity<List<ItemAvailabilityResponse>> getAvailabilityByItemIds(
+      @PathVariable List<Long> itemIds) {
+
     List<ItemAvailabilityResponse> availabilityByItem =
-        itemAvailabilityService.getAvailabilityByItem(itemId);
+        itemAvailabilityService.getAvailabilityByItemIds(itemIds);
 
     return ResponseEntity.ok(availabilityByItem);
   }

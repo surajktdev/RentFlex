@@ -9,6 +9,7 @@ import com.rentflex.inventoryservice.repository.ItemAvailabilityRepository;
 import com.rentflex.inventoryservice.repository.ItemRepository;
 import com.rentflex.inventoryservice.service.ItemAvailabilityService;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,24 +43,53 @@ public class ItemAvailabilityServiceImpl implements ItemAvailabilityService {
   }
 
   @Override
-  public List<ItemAvailabilityResponse> getAvailabilityByItem(Long itemId) {
+  public ItemAvailabilityResponse getAvailabilityByItemId(Long itemId) {
     Item savedItem =
         itemRepository
             .findById(itemId)
             .orElseThrow(
                 () ->
                     new ResourceNotFoundException("Item details not found. for itemId: " + itemId));
-    List<ItemAvailability> byItemId = availabilityRepository.findByItemId(savedItem.getId());
-    return byItemId.stream()
-        .map(
-            byId ->
-                ItemAvailabilityResponse.builder()
-                    .itemId(byId.getItem().getId())
-                    .availableFrom(byId.getAvailableFrom())
-                    .availableTo(byId.getAvailableTo())
-                    .isAvailable(byId.getIsAvailable())
-                    .build())
-        .toList();
+    ItemAvailability byId =
+        availabilityRepository
+            .findById(savedItem.getId())
+            .orElseThrow(
+                () ->
+                    new ResourceNotFoundException("Item details not found. for itemId: " + itemId));
+    return ItemAvailabilityResponse.builder()
+        .itemId(byId.getId())
+        .availableFrom(byId.getAvailableFrom())
+        .availableTo(byId.getAvailableTo())
+        .isAvailable(byId.getIsAvailable())
+        .build();
+  }
+
+  @Override
+  public List<ItemAvailabilityResponse> getAvailabilityByItemIds(List<Long> itemIds) {
+    Item savedItem = null;
+    for (Long itemId : itemIds) {
+      savedItem =
+          itemRepository
+              .findById(itemId)
+              .orElseThrow(
+                  () ->
+                      new ResourceNotFoundException(
+                          "Item details not found. for itemId: " + itemId));
+    }
+    List<ItemAvailability> availabilities = availabilityRepository.findAllById(itemIds);
+
+    List<ItemAvailabilityResponse> availabilityResponses = new ArrayList<>();
+    for (ItemAvailability itemAvailability : availabilities) {
+      availabilityResponses.add(
+          ItemAvailabilityResponse.builder()
+              .itemId(itemAvailability.getId())
+              .availableFrom(itemAvailability.getAvailableFrom())
+              .availableTo(itemAvailability.getAvailableTo())
+              .isAvailable(itemAvailability.getIsAvailable())
+              .build());
+    }
+
+    return availabilityResponses;
   }
 
   @Override

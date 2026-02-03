@@ -1,6 +1,5 @@
 package com.rentflex.bookingservice.client;
 
-import java.util.List;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
@@ -8,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 public interface InventoryClient {
 
     @GetMapping("/api/v1/item-availability/item/{itemId}")
-    List<ItemAvailabilityResponse> getAvailabilityByItem(@PathVariable Long itemId);
+    ItemAvailabilityResponse getAvailabilityByItemId(@PathVariable Long itemId);
 
     @PutMapping("/api/v1/item-availability/{id}")
     ItemAvailabilityResponse updateAvailability(

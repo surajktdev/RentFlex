@@ -1,5 +1,6 @@
 package com.rentflex.bookingservice.auth;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,19 +30,39 @@ public class JwtFilter extends OncePerRequestFilter {
 
             String jwt = authHeader.substring(7);
 
-            if (jwtUtil.validateToken(jwt)) {
+            try {
+                if (jwtUtil.validateToken(jwt)) {
 
-                String username = jwtUtil.extractUsername(jwt);
+                    String username = jwtUtil.extractUsername(jwt);
 
-                UsernamePasswordAuthenticationToken authentication =
-                        new UsernamePasswordAuthenticationToken(
-                                username, null, List.of() // roles optional
-                                );
+                    UsernamePasswordAuthenticationToken authentication =
+                            new UsernamePasswordAuthenticationToken(
+                                    username, null, List.of() // roles optional
+                                    );
 
-                authentication.setDetails(
-                        new WebAuthenticationDetailsSource().buildDetails(request));
+                    authentication.setDetails(
+                            new WebAuthenticationDetailsSource().buildDetails(request));
 
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
+            } catch (ExpiredJwtException ex) {
+
+                SecurityContextHolder.clearContext();
+
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setContentType("application/json");
+
+                response.getWriter()
+                        .write(
+                                """
+        {
+          "success": false,
+          "message": "Your session has expired. Please login again.",
+          "error": "JWT_EXPIRED"
+        }
+    """);
+
+                return;
             }
         }
 

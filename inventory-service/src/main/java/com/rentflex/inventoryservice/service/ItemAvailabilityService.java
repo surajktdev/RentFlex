@@ -7,7 +7,9 @@ import java.util.List;
 public interface ItemAvailabilityService {
   ItemAvailabilityResponse setItemAvailability(ItemAvailabilityRequest availabilityRequest);
 
-  List<ItemAvailabilityResponse> getAvailabilityByItem(Long itemId);
+  ItemAvailabilityResponse getAvailabilityByItemId(Long itemId);
+
+  List<ItemAvailabilityResponse> getAvailabilityByItemIds(List<Long> itemId);
 
   ItemAvailabilityResponse updateAvailability(
       Long availabilityId, ItemAvailabilityRequest availabilityRequest);

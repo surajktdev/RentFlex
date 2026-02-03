@@ -56,17 +56,19 @@ public class BookingServiceImpl implements BookingService {
         }
 
         // Check item availability via InventoryService
-        List<ItemAvailabilityResponse> availabilityByItem = null;
-        //        try {
-        //            availabilityByItem = inventoryClient.getAvailabilityByItem(request.itemId());
-        //        } catch (FeignException.NotFound ex) {
-        //            throw new ResourceNotFoundException("Item details not found to complete this
-        // booking.");
-        //        }
+        ItemAvailabilityResponse availabilityByItem = null;
+        try {
+            availabilityByItem = inventoryClient.getAvailabilityByItemId(request.itemId());
+            if (availabilityByItem.getIsAvailable().equals(Boolean.FALSE)) {
+                throw new ResourceNotFoundException("Item is not available.");
+            }
+        } catch (FeignException.NotFound ex) {
+            throw new ResourceNotFoundException("Item details not found to complete this booking.");
+        }
 
         Booking booking = new Booking();
         booking.setUserId(userById.getId());
-        booking.setItemId(request.itemId());
+        booking.setItemId(availabilityByItem.getItemId());
         booking.setStartDate(request.startDate());
         booking.setEndDate(request.endDate());
         booking.setStatus(request.status());
@@ -74,16 +76,21 @@ public class BookingServiceImpl implements BookingService {
         booking.setUpdatedAt(LocalDateTime.now());
 
         Booking saved = bookingRepository.save(booking);
-        //        try{
-        //            //TODO(Pending work): here i have to fix the logic of item availability dates
-        //            ItemAvailabilityRequest itemAvailabilityRequest = new
-        // ItemAvailabilityRequest(availabilityByItem.getFirst().getItemId(), saved.getEndDate(),
-        // saved.getStartDate(), false);
-        //            inventoryClient.updateAvailability(availabilityByItem.getFirst().getItemId(),
-        // itemAvailabilityRequest);
-        //        } catch (FeignException.NotFound ex) {
-        //            throw new ResourceNotFoundException("Not able to update item after booking");
-        //        }
+        try {
+            //            //TODO(Pending work): here i have to fix the logic of item availability
+            // dates
+            ItemAvailabilityRequest itemAvailabilityRequest =
+                    new ItemAvailabilityRequest(
+                            availabilityByItem.getItemId(),
+                            saved.getEndDate(),
+                            saved.getStartDate(),
+                            false);
+
+            inventoryClient.updateAvailability(
+                    availabilityByItem.getItemId(), itemAvailabilityRequest);
+        } catch (FeignException.NotFound ex) {
+            throw new ResourceNotFoundException("Not able to update item after booking");
+        }
 
         // TODO(Pending work): as of now total amount is coming null I have to fix that
         //  check item amount from item service accordingly I have to add it in booking table
