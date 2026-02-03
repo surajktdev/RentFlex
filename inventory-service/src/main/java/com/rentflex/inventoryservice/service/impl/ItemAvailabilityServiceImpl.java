@@ -8,7 +8,6 @@ import com.rentflex.inventoryservice.model.ItemAvailability;
 import com.rentflex.inventoryservice.repository.ItemAvailabilityRepository;
 import com.rentflex.inventoryservice.repository.ItemRepository;
 import com.rentflex.inventoryservice.service.ItemAvailabilityService;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +47,8 @@ public class ItemAvailabilityServiceImpl implements ItemAvailabilityService {
         itemRepository
             .findById(itemId)
             .orElseThrow(
-                () -> new ResourceNotFoundException("Item details not found. for itemId: " + itemId));
+                () ->
+                    new ResourceNotFoundException("Item details not found. for itemId: " + itemId));
     List<ItemAvailability> byItemId = availabilityRepository.findByItemId(savedItem.getId());
     return byItemId.stream()
         .map(

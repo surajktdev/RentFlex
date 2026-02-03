@@ -1,6 +1,5 @@
 package com.rentflex.userservice.auth;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.rentflex.userservice.dto.UserResponse;
 import lombok.Builder;

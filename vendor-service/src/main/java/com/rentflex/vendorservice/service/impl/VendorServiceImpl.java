@@ -61,7 +61,10 @@ public class VendorServiceImpl implements VendorService {
         Vendor savedVendorDetails =
                 vendorRepo
                         .findByVendorId(vendorId)
-                        .orElseThrow(() -> new ResourceNotFoundException("Vendor not found for id: "+vendorId));
+                        .orElseThrow(
+                                () ->
+                                        new ResourceNotFoundException(
+                                                "Vendor not found for id: " + vendorId));
 
         return VendorResponse.builder()
                 .vendorId(savedVendorDetails.getVendorId())
@@ -148,7 +151,8 @@ public class VendorServiceImpl implements VendorService {
         Vendor savedVendorDetails =
                 vendorRepo
                         .findByUserId(userId)
-                        .orElseThrow(() -> new ResourceNotFoundException("Vendor Details not found"));
+                        .orElseThrow(
+                                () -> new ResourceNotFoundException("Vendor Details not found"));
         return VendorResponse.builder()
                 .businessName(savedVendorDetails.getBusinessName())
                 .email(savedVendorDetails.getEmail())

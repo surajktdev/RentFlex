@@ -27,15 +27,15 @@ public class ItemAvailabilityController {
     return new ResponseEntity<>(itemAvailabilityResponse, HttpStatus.CREATED);
   }
 
-    @GetMapping("/item/{itemId}")
-    public ResponseEntity<List<ItemAvailabilityResponse>> getAvailabilityByItem(
-            @PathVariable Long itemId) {
+  @GetMapping("/item/{itemId}")
+  public ResponseEntity<List<ItemAvailabilityResponse>> getAvailabilityByItem(
+      @PathVariable Long itemId) {
 
-        List<ItemAvailabilityResponse> availabilityByItem =
-                itemAvailabilityService.getAvailabilityByItem(itemId);
+    List<ItemAvailabilityResponse> availabilityByItem =
+        itemAvailabilityService.getAvailabilityByItem(itemId);
 
-        return ResponseEntity.ok(availabilityByItem);
-    }
+    return ResponseEntity.ok(availabilityByItem);
+  }
 
   @PutMapping("/{id}")
   public ResponseEntity<ItemAvailabilityResponse> updateAvailability(

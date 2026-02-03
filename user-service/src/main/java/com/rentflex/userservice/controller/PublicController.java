@@ -24,8 +24,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
-
 @RestController
 @RequestMapping("/auth/v1/")
 @Tag(
@@ -38,11 +36,9 @@ public class PublicController {
 
     @Autowired private AuthenticationManager authenticationManager;
 
-    @Autowired
-    private UserDetailsService userDetailsService;
+    @Autowired private UserDetailsService userDetailsService;
 
-    @Autowired
-    private UserRepository userRepository;
+    @Autowired private UserRepository userRepository;
 
     @Autowired private JwtUtil jwtUtil;
 
@@ -56,28 +52,42 @@ public class PublicController {
     @PostMapping("/login")
     @Operation(summary = "generate token")
     public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
-            this.doAuthenticate(request.email(), request.password());
-            UserDetails userDetails = userDetailsService.loadUserByUsername(request.email());
-            String generatedToken = jwtUtil.generateToken(userDetails.getUsername());
-            User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow(
-                    () ->
-                            new UsernameNotFoundException(
-                                    "User not found with email: " + userDetails.getUsername()));;
-            UserResponse userResponse =
-                    UserResponse.builder().id(user.getId()).userName(user.getUserName()).email(user.getEmail()).role(user.getRole()).status(user.getStatus()).build();
-            AuthResponse response =
-                    AuthResponse.builder().token(generatedToken).userResponse(userResponse).build();
-            return new ResponseEntity<>(response, HttpStatus.OK);
+        this.doAuthenticate(request.email(), request.password());
+        UserDetails userDetails = userDetailsService.loadUserByUsername(request.email());
+        String generatedToken = jwtUtil.generateToken(userDetails.getUsername());
+        User user =
+                userRepository
+                        .findByEmail(userDetails.getUsername())
+                        .orElseThrow(
+                                () ->
+                                        new UsernameNotFoundException(
+                                                "User not found with email: "
+                                                        + userDetails.getUsername()));
+        ;
+        UserResponse userResponse =
+                UserResponse.builder()
+                        .id(user.getId())
+                        .userName(user.getUserName())
+                        .email(user.getEmail())
+                        .role(user.getRole())
+                        .status(user.getStatus())
+                        .build();
+        AuthResponse response =
+                AuthResponse.builder().token(generatedToken).userResponse(userResponse).build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     private void doAuthenticate(String email, String password) {
 
-        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(email, password);
+        UsernamePasswordAuthenticationToken authentication =
+                new UsernamePasswordAuthenticationToken(email, password);
         try {
             authenticationManager.authenticate(authentication);
         } catch (BadCredentialsException e) {
             throw new BadRequestException(" Invalid Username or Password  !!");
             //            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-//                    .body(AuthResponse.builder().message("Incorrect username or password").build());
+            //                    .body(AuthResponse.builder().message("Incorrect username or
+            // password").build());
         }
-    }}
+    }
+}
