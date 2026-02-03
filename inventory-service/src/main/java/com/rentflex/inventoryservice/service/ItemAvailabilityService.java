@@ -11,8 +11,7 @@ public interface ItemAvailabilityService {
 
   List<ItemAvailabilityResponse> getAvailabilityByItemIds(List<Long> itemId);
 
-  ItemAvailabilityResponse updateAvailability(
-      Long availabilityId, ItemAvailabilityRequest availabilityRequest);
+  ItemAvailabilityResponse updateAvailability(ItemAvailabilityRequest availabilityRequest);
 
   void deleteAvailability(Long availabilityId);
 }

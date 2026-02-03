@@ -34,7 +34,7 @@ public class ItemController {
   @GetMapping("/{id}")
   public ResponseEntity<ItemResponse> getItemById(@PathVariable Long id) {
     ItemResponse itemById = itemService.getItemById(id);
-    return new ResponseEntity<>(itemById, HttpStatus.FOUND);
+    return ResponseEntity.ok(itemById);
   }
 
   @GetMapping("/{vendorId}/vendor")

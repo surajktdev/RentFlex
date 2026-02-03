@@ -9,7 +9,9 @@ public interface InventoryClient {
     @GetMapping("/api/v1/item-availability/item/{itemId}")
     ItemAvailabilityResponse getAvailabilityByItemId(@PathVariable Long itemId);
 
-    @PutMapping("/api/v1/item-availability/{id}")
-    ItemAvailabilityResponse updateAvailability(
-            @PathVariable("id") Long itemId, @RequestBody ItemAvailabilityRequest request);
+    @PutMapping("/api/v1/item-availability/updateAvailability")
+    ItemAvailabilityResponse updateAvailability(@RequestBody ItemAvailabilityRequest request);
+
+    @GetMapping("/api/v1/item/{id}")
+    ItemResponse getItemById(@PathVariable Long id);
 }

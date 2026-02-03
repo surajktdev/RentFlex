@@ -93,8 +93,7 @@ public class ItemAvailabilityServiceImpl implements ItemAvailabilityService {
   }
 
   @Override
-  public ItemAvailabilityResponse updateAvailability(
-      Long availabilityId, ItemAvailabilityRequest availabilityRequest) {
+  public ItemAvailabilityResponse updateAvailability(ItemAvailabilityRequest availabilityRequest) {
     Item savedItem =
         itemRepository
             .findById(availabilityRequest.itemId())
@@ -104,11 +103,12 @@ public class ItemAvailabilityServiceImpl implements ItemAvailabilityService {
                         "Item details not found. for itemId: " + availabilityRequest.itemId()));
     ItemAvailability itemAvailability =
         availabilityRepository
-            .findById(availabilityId)
+            .findById(availabilityRequest.itemId())
             .orElseThrow(
                 () ->
                     new RuntimeException(
-                        "Item availability details not found for id: " + availabilityId));
+                        "Item availability details not found for id: "
+                            + availabilityRequest.itemId()));
     itemAvailability.setItem(savedItem);
     itemAvailability.setAvailableFrom(availabilityRequest.availableFrom());
     itemAvailability.setAvailableTo(availabilityRequest.availableTo());

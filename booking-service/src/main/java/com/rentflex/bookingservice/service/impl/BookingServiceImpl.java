@@ -15,6 +15,7 @@ import com.rentflex.bookingservice.service.BookingService;
 import feign.FeignException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -66,11 +67,23 @@ public class BookingServiceImpl implements BookingService {
             throw new ResourceNotFoundException("Item details not found to complete this booking.");
         }
 
+        ItemResponse itemById = null;
+        try {
+            itemById = inventoryClient.getItemById(1L);
+        } catch (FeignException.NotFound ex) {
+            throw new ResourceNotFoundException(ex.getMessage());
+        }
+
+        // here I am counting days for now
+        long days = ChronoUnit.DAYS.between(request.startDate(), request.endDate());
+        Double totalBookingAmount = days * itemById.getPricePerDay();
+
         Booking booking = new Booking();
         booking.setUserId(userById.getId());
         booking.setItemId(availabilityByItem.getItemId());
         booking.setStartDate(request.startDate());
         booking.setEndDate(request.endDate());
+        booking.setTotalPrice(totalBookingAmount);
         booking.setStatus(request.status());
         booking.setCreatedAt(LocalDateTime.now());
         booking.setUpdatedAt(LocalDateTime.now());
@@ -85,9 +98,7 @@ public class BookingServiceImpl implements BookingService {
                             saved.getEndDate(),
                             saved.getStartDate(),
                             false);
-
-            inventoryClient.updateAvailability(
-                    availabilityByItem.getItemId(), itemAvailabilityRequest);
+            inventoryClient.updateAvailability(itemAvailabilityRequest);
         } catch (FeignException.NotFound ex) {
             throw new ResourceNotFoundException("Not able to update item after booking");
         }

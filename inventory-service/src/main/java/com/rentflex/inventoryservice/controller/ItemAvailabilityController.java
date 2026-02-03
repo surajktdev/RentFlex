@@ -47,11 +47,11 @@ public class ItemAvailabilityController {
     return ResponseEntity.ok(availabilityByItem);
   }
 
-  @PutMapping("/{id}")
+  @PutMapping("/updateAvailability")
   public ResponseEntity<ItemAvailabilityResponse> updateAvailability(
-      @PathVariable Long id, @RequestBody ItemAvailabilityRequest request) {
+      @RequestBody ItemAvailabilityRequest request) {
     ItemAvailabilityResponse itemAvailabilityResponse =
-        itemAvailabilityService.updateAvailability(id, request);
+        itemAvailabilityService.updateAvailability(request);
     return ResponseEntity.ok(itemAvailabilityResponse);
   }
 
