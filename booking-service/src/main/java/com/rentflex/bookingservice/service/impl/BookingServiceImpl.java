@@ -4,6 +4,7 @@ import com.rentflex.bookingservice.client.*;
 import com.rentflex.bookingservice.dto.BookingRequestDTO;
 import com.rentflex.bookingservice.dto.BookingResponseDTO;
 import com.rentflex.bookingservice.dto.CancelBookingRequestDTO;
+import com.rentflex.bookingservice.exception.ResourceNotFoundException;
 import com.rentflex.bookingservice.kafka.events.BookingCreatedEvent;
 import com.rentflex.bookingservice.kafka.producer.BookingEventProducer;
 import com.rentflex.bookingservice.model.Booking;
@@ -11,6 +12,7 @@ import com.rentflex.bookingservice.model.BookingStatus;
 import com.rentflex.bookingservice.repository.BookingRepository;
 import com.rentflex.bookingservice.repository.PaymentInfoRepository;
 import com.rentflex.bookingservice.service.BookingService;
+import feign.FeignException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -43,14 +45,15 @@ public class BookingServiceImpl implements BookingService {
 
         // pending work
         // Check user validity via UserService (Feign Client)
-        // TODO(Pending work): I have to fix JWT authentication issue in this service
-        //        UserResponse userById = null;
-        //        try {
-        //            userById = userClient.getUserById(request.userId());
-        //        } catch (FeignException.NotFound ex) {
-        //            throw new ResourceNotFoundException("User not found to complete this
-        // booking.");
-        //        }
+        UserResponse userById = null;
+        try {
+            userById = userClient.getUserById(request.userId());
+        } catch (FeignException.Unauthorized ex) {
+            throw new ResourceNotFoundException(
+                    "Access Denied !! Full authentication is required to access this resource");
+        } catch (FeignException.NotFound ex) {
+            throw new ResourceNotFoundException("User not found to complete this booking.");
+        }
 
         // Check item availability via InventoryService
         List<ItemAvailabilityResponse> availabilityByItem = null;
@@ -62,7 +65,7 @@ public class BookingServiceImpl implements BookingService {
         //        }
 
         Booking booking = new Booking();
-        booking.setUserId(request.userId());
+        booking.setUserId(userById.getId());
         booking.setItemId(request.itemId());
         booking.setStartDate(request.startDate());
         booking.setEndDate(request.endDate());
