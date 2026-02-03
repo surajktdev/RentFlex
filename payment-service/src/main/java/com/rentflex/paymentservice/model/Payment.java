@@ -18,8 +18,13 @@ public class Payment {
     private Long vendorId;
     private Double amount;
     private String currency;
+
+    @Enumerated(EnumType.STRING)
     private PaymentStatus status;
+
+    @Enumerated(EnumType.STRING)
     private PaymentMethod method;
+
     private LocalDateTime paymentDate;
     private String transactionId;
     private String gatewayName;

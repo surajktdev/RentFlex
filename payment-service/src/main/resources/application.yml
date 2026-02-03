@@ -17,6 +17,10 @@ spring:
 
   kafka:
     bootstrap-servers: localhost:9092
+
+    # =========================
+    # CONSUMER (Booking → Payment)
+    # =========================
     consumer:
       group-id: payment-service-group
       auto-offset-reset: earliest
@@ -27,6 +31,18 @@ spring:
         spring.json.value.default.type: com.rentflex.paymentservice.kafka.events.BookingCreatedEvent
         spring.json.trusted.packages: "*"
         spring.json.use.type.headers: false
+
+    # =========================
+    # PRODUCER (Payment → Booking)
+    # =========================
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.add.type.headers: false
+
+
+
 
 
 

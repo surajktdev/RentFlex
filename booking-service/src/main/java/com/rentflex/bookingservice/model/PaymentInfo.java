@@ -1,7 +1,9 @@
 package com.rentflex.bookingservice.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
+@Data
 @Entity
 @Table(name = "payments")
 public class PaymentInfo {
