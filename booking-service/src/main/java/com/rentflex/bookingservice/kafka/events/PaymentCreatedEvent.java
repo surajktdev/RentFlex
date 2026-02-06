@@ -6,7 +6,7 @@ import lombok.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class BookingCreatedEvent {
+public class PaymentCreatedEvent {
 
     private Long bookingId;
     private Long userId;
