@@ -1,6 +1,8 @@
 package com.rentflex.bookingservice.kafka.consumer;
 
+import com.rentflex.bookingservice.kafka.events.NotificationCreateEvent;
 import com.rentflex.bookingservice.kafka.events.PaymentResultEvent;
+import com.rentflex.bookingservice.kafka.producer.NotificationEventProducer;
 import com.rentflex.bookingservice.model.Booking;
 import com.rentflex.bookingservice.model.BookingStatus;
 import com.rentflex.bookingservice.model.PaymentInfo;
@@ -19,6 +21,7 @@ public class PaymentResultConsumer {
 
     private final PaymentInfoRepository paymentInfoRepository;
     private final BookingRepository bookingRepository;
+    private final NotificationEventProducer notificationEventProducer;
 
     @KafkaListener(topics = "booking.payment.response", groupId = "booking-service-group")
     public void handlePaymentResult(PaymentResultEvent event) {
@@ -41,6 +44,12 @@ public class PaymentResultConsumer {
             booking.setStatus(BookingStatus.PAYMENT_FAILED);
         }
 
-        bookingRepository.save(booking);
+        Booking saved = bookingRepository.save(booking);
+        notificationEventProducer.sendBookingStatusEvent(
+                new NotificationCreateEvent(
+                        saved.getId(),
+                        saved.getUserId(),
+                        saved.getItemId(),
+                        saved.getStatus()));
     }
 }

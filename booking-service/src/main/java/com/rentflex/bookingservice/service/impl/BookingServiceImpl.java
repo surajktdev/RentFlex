@@ -5,8 +5,10 @@ import com.rentflex.bookingservice.dto.BookingRequestDTO;
 import com.rentflex.bookingservice.dto.BookingResponseDTO;
 import com.rentflex.bookingservice.dto.CancelBookingRequestDTO;
 import com.rentflex.bookingservice.exception.ResourceNotFoundException;
-import com.rentflex.bookingservice.kafka.events.BookingCreatedEvent;
-import com.rentflex.bookingservice.kafka.producer.BookingEventProducer;
+import com.rentflex.bookingservice.kafka.events.NotificationCreateEvent;
+import com.rentflex.bookingservice.kafka.events.PaymentCreatedEvent;
+import com.rentflex.bookingservice.kafka.producer.NotificationEventProducer;
+import com.rentflex.bookingservice.kafka.producer.PaymentEventProducer;
 import com.rentflex.bookingservice.model.Booking;
 import com.rentflex.bookingservice.model.BookingStatus;
 import com.rentflex.bookingservice.repository.BookingRepository;
@@ -28,8 +30,7 @@ public class BookingServiceImpl implements BookingService {
     private final PaymentInfoRepository paymentInfoRepository;
     private final UserClient userClient;
     private final InventoryClient inventoryClient;
-    private final BookingEventProducer producer;
-
+    private final PaymentEventProducer paymentEventProducer;
     @Override
     public BookingResponseDTO createBooking(BookingRequestDTO request) {
         if (request.userId() == null || request.itemId() == null) {
@@ -107,8 +108,8 @@ public class BookingServiceImpl implements BookingService {
         //  check item amount from item service accordingly I have to add it in booking table
 
         // Publish Kafka event
-        BookingCreatedEvent event =
-                new BookingCreatedEvent(
+        PaymentCreatedEvent event =
+                new PaymentCreatedEvent(
                         saved.getId(),
                         saved.getUserId(),
                         saved.getItemId(),
@@ -116,7 +117,7 @@ public class BookingServiceImpl implements BookingService {
                         "INR",
                         LocalDateTime.now());
 
-        producer.sendBookingCreatedEvent(event);
+        paymentEventProducer.sendBookingCreatedEvent(event);
         return BookingResponseDTO.builder()
                 .bookingId(saved.getId())
                 .message("Booking created successfully")
